@@ -22,6 +22,7 @@ const NavBarToggler = (props: {
     </button>
   );
 };
+
 const NavBarLinks = (props: { mediaTarget: "desktop" | "mobile" }) => {
   return (
     <div id="navbarResponsive" className="navbar-collapse">
