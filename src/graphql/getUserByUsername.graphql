@@ -1,0 +1,21 @@
+query GetUserWithPosts($username: String!) {
+  getUserByUsername(username: $username) {
+    user_id
+    username
+    posts {
+      posts {
+        post_id
+        title
+        subtitle
+        post_text
+        created_at
+        votes {
+          upvote
+          downvote
+        }
+        deleted
+      }
+      more
+    }
+  }
+}
