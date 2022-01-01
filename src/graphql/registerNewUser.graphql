@@ -1,0 +1,14 @@
+mutation RegisterNewUser(
+  $username: String!
+  $email: String!
+  $password: String!
+) {
+  registerNewUser(
+    userInput: { username: $username, email: $email, password: $password }
+  ) {
+    user_id
+    username
+    email
+    created_at
+  }
+}
