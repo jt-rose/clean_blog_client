@@ -1,14 +1,12 @@
 query GetPosts($author_id: Int!, $title: String, $limit: Int!, $offset: Int!) {
-  getManyPosts {
-    getManyPosts(
-      postSearch: { title: $title, limit: $limit, offset: $offset }
-      author_id: $author_id
-    ) {
-      posts {
-        post_id
-        title
-      }
-      more
+  getManyPosts(
+    postSearch: { title: $title, limit: $limit, offset: $offset }
+    author_id: $author_id
+  ) {
+    posts {
+      post_id
+      title
     }
+    more
   }
 }
