@@ -1,4 +1,4 @@
-{
+query Me {
   me {
     user_id
     username
