@@ -1,20 +1,24 @@
 import { useRouter } from "next/router";
-import { useGetUserWithPostsQuery } from "../../generated/graphql";
+import { getSdk, GetUserWithPostsQuery } from "../../generated/graphql-sdk";
 import { client } from "../../utils/gqlClient";
+import { GetServerSideProps } from "next";
 
-/*
-export async function getStaticProps() {
-    const u = await useGetUserWithPostsQuery(client, { username: "jtr"})
-    u.data?.getUserByUsername?.username
-   return { props: { u } }
-  }
-*/
-const User = () => {
-  const router = useRouter();
-  const { user } = router.query;
-  const { data, error, isLoading } = useGetUserWithPostsQuery(client, {
-    username: "jtr",
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { user } = context.query;
+  const username = typeof user === "string" ? user : "";
+  const userWithPosts = await getSdk(client).GetUserWithPosts({
+    username,
   });
+
+  return { props: { userWithPosts } };
+};
+
+const User = (props: { userWithPosts: GetUserWithPostsQuery }) => {
+  const router = useRouter();
+  //const { user } = router.query;
+  //const { data, error, isLoading } = useGetUserWithPostsQuery(client, {
+  //username: "jtr",
+  //});
 
   /*const username = typeof user === "string" ? user : "";
   //const {} = useQuery('', )
@@ -34,7 +38,22 @@ const User = () => {
   if (!data || !data.getUserByUsername) {
     return <p>Error: No data returned!</p>;
   }*/
-  return <p>User: {data?.getUserByUsername?.username}</p>;
+  console.log(props.userWithPosts);
+  return (
+    <div>
+      <p>Username: {props.userWithPosts.getUserByUsername?.username}</p>
+      <p>User_id: {props.userWithPosts.getUserByUsername?.user_id}</p>
+      <ul>
+        {props.userWithPosts.getUserByUsername?.posts?.posts?.map((p) => (
+          <li>{p?.title}</li>
+        ))}
+      </ul>
+      <p>
+        Has more posts:{" "}
+        {`${props.userWithPosts.getUserByUsername?.posts?.more}`}
+      </p>
+    </div>
+  );
 };
 
 export default User;
