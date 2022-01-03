@@ -309,23 +309,6 @@ export type ForgotPasswordMutationVariables = Exact<{
 
 export type ForgotPasswordMutation = { __typename?: 'Mutation', forgotPassword: boolean };
 
-export type GetPostsQueryVariables = Exact<{
-  author_id: Scalars['Int'];
-  title?: InputMaybe<Scalars['String']>;
-  limit: Scalars['Int'];
-  offset: Scalars['Int'];
-}>;
-
-
-export type GetPostsQuery = { __typename?: 'Query', getManyPosts: { __typename?: 'PaginatedPosts', more: boolean, posts?: Array<{ __typename?: 'Post', post_id: number, title: string } | null | undefined> | null | undefined } };
-
-export type GetUserWithPostsQueryVariables = Exact<{
-  username: Scalars['String'];
-}>;
-
-
-export type GetUserWithPostsQuery = { __typename?: 'Query', getUserByUsername?: { __typename?: 'User', user_id: number, username: string, posts?: { __typename?: 'PaginatedPosts', more: boolean, posts?: Array<{ __typename?: 'Post', post_id: number, title: string, subtitle: string, post_text: string, created_at: any, deleted: boolean, votes: { __typename?: 'Votes', upvote: number, downvote: number } } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
-
 export type LoginMutationVariables = Exact<{
   username: Scalars['String'];
   password: Scalars['String'];
@@ -362,6 +345,23 @@ export type ResetPasswordMutationVariables = Exact<{
 
 export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword: { __typename?: 'User', user_id: number, username: string, email: string } };
 
+export type GetPostsQueryVariables = Exact<{
+  author_id: Scalars['Int'];
+  title?: InputMaybe<Scalars['String']>;
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
+}>;
+
+
+export type GetPostsQuery = { __typename?: 'Query', getManyPosts: { __typename?: 'PaginatedPosts', more: boolean, posts?: Array<{ __typename?: 'Post', post_id: number, title: string } | null | undefined> | null | undefined } };
+
+export type GetUserWithPostsQueryVariables = Exact<{
+  username: Scalars['String'];
+}>;
+
+
+export type GetUserWithPostsQuery = { __typename?: 'Query', getUserByUsername?: { __typename?: 'User', user_id: number, username: string, posts?: { __typename?: 'PaginatedPosts', more: boolean, posts?: Array<{ __typename?: 'Post', post_id: number, title: string, subtitle: string, post_text: string, created_at: any, deleted: boolean, votes: { __typename?: 'Votes', upvote: number, downvote: number } } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
+
 
 export const AccessPasswordResetDocument = `
     mutation AccessPasswordReset($resetKey: String!) {
@@ -397,71 +397,6 @@ export const useForgotPasswordMutation = <
     useMutation<ForgotPasswordMutation, TError, ForgotPasswordMutationVariables, TContext>(
       'ForgotPassword',
       (variables?: ForgotPasswordMutationVariables) => fetcher<ForgotPasswordMutation, ForgotPasswordMutationVariables>(client, ForgotPasswordDocument, variables, headers)(),
-      options
-    );
-export const GetPostsDocument = `
-    query GetPosts($author_id: Int!, $title: String, $limit: Int!, $offset: Int!) {
-  getManyPosts(
-    postSearch: {title: $title, limit: $limit, offset: $offset}
-    author_id: $author_id
-  ) {
-    posts {
-      post_id
-      title
-    }
-    more
-  }
-}
-    `;
-export const useGetPostsQuery = <
-      TData = GetPostsQuery,
-      TError = unknown
-    >(
-      client: GraphQLClient,
-      variables: GetPostsQueryVariables,
-      options?: UseQueryOptions<GetPostsQuery, TError, TData>,
-      headers?: RequestInit['headers']
-    ) =>
-    useQuery<GetPostsQuery, TError, TData>(
-      ['GetPosts', variables],
-      fetcher<GetPostsQuery, GetPostsQueryVariables>(client, GetPostsDocument, variables, headers),
-      options
-    );
-export const GetUserWithPostsDocument = `
-    query GetUserWithPosts($username: String!) {
-  getUserByUsername(username: $username) {
-    user_id
-    username
-    posts {
-      posts {
-        post_id
-        title
-        subtitle
-        post_text
-        created_at
-        votes {
-          upvote
-          downvote
-        }
-        deleted
-      }
-      more
-    }
-  }
-}
-    `;
-export const useGetUserWithPostsQuery = <
-      TData = GetUserWithPostsQuery,
-      TError = unknown
-    >(
-      client: GraphQLClient,
-      variables: GetUserWithPostsQueryVariables,
-      options?: UseQueryOptions<GetUserWithPostsQuery, TError, TData>,
-      headers?: RequestInit['headers']
-    ) =>
-    useQuery<GetUserWithPostsQuery, TError, TData>(
-      ['GetUserWithPosts', variables],
-      fetcher<GetUserWithPostsQuery, GetUserWithPostsQueryVariables>(client, GetUserWithPostsDocument, variables, headers),
       options
     );
 export const LoginDocument = `
@@ -577,5 +512,70 @@ export const useResetPasswordMutation = <
     useMutation<ResetPasswordMutation, TError, ResetPasswordMutationVariables, TContext>(
       'ResetPassword',
       (variables?: ResetPasswordMutationVariables) => fetcher<ResetPasswordMutation, ResetPasswordMutationVariables>(client, ResetPasswordDocument, variables, headers)(),
+      options
+    );
+export const GetPostsDocument = `
+    query GetPosts($author_id: Int!, $title: String, $limit: Int!, $offset: Int!) {
+  getManyPosts(
+    postSearch: {title: $title, limit: $limit, offset: $offset}
+    author_id: $author_id
+  ) {
+    posts {
+      post_id
+      title
+    }
+    more
+  }
+}
+    `;
+export const useGetPostsQuery = <
+      TData = GetPostsQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables: GetPostsQueryVariables,
+      options?: UseQueryOptions<GetPostsQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<GetPostsQuery, TError, TData>(
+      ['GetPosts', variables],
+      fetcher<GetPostsQuery, GetPostsQueryVariables>(client, GetPostsDocument, variables, headers),
+      options
+    );
+export const GetUserWithPostsDocument = `
+    query GetUserWithPosts($username: String!) {
+  getUserByUsername(username: $username) {
+    user_id
+    username
+    posts {
+      posts {
+        post_id
+        title
+        subtitle
+        post_text
+        created_at
+        votes {
+          upvote
+          downvote
+        }
+        deleted
+      }
+      more
+    }
+  }
+}
+    `;
+export const useGetUserWithPostsQuery = <
+      TData = GetUserWithPostsQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables: GetUserWithPostsQueryVariables,
+      options?: UseQueryOptions<GetUserWithPostsQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<GetUserWithPostsQuery, TError, TData>(
+      ['GetUserWithPosts', variables],
+      fetcher<GetUserWithPostsQuery, GetUserWithPostsQueryVariables>(client, GetUserWithPostsDocument, variables, headers),
       options
     );
