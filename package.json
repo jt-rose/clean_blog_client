@@ -6,6 +6,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "gen": "graphql-codegen --config codegen-hooks.yml && graphql-codegen --config codegen-sdk.yml",
     "gen-hooks": "graphql-codegen --config codegen-hooks.yml",
     "gen-sdk": "graphql-codegen --config codegen-sdk.yml"
   },
