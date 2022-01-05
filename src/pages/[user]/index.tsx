@@ -3,17 +3,39 @@ import { getSdk, GetUserWithPostsQuery } from "../../generated/graphql-sdk";
 import { client } from "../../utils/gqlClient";
 import { GetServerSideProps } from "next";
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { user } = context.query;
-  const username = typeof user === "string" ? user : "";
-  const userWithPosts = await getSdk(client).GetUserWithPosts({
-    username,
-  });
+interface UserResponse {
+  userWithPosts: GetUserWithPostsQuery | null;
+  error: string | null;
+}
 
-  return { props: { userWithPosts } };
+export const getServerSideProps: GetServerSideProps = async (
+  context
+): Promise<{ props: UserResponse }> => {
+  try {
+    const { user } = context.query;
+    const username = typeof user === "string" ? user : "";
+    const userWithPosts = await getSdk(client).GetUserWithPosts({
+      username,
+    });
+
+    return { props: { userWithPosts, error: null } };
+  } catch (e) {
+    if (e instanceof Error) {
+      return {
+        props: { userWithPosts: null, error: e.message.replace(/\:.+/, "") },
+      };
+    } else {
+      return {
+        props: {
+          userWithPosts: null,
+          error: "internal server error",
+        },
+      };
+    }
+  }
 };
 
-const User = (props: { userWithPosts: GetUserWithPostsQuery }) => {
+const User = (props: UserResponse) => {
   const router = useRouter();
   //const { user } = router.query;
   //const { data, error, isLoading } = useGetUserWithPostsQuery(client, {
@@ -39,19 +61,26 @@ const User = (props: { userWithPosts: GetUserWithPostsQuery }) => {
     return <p>Error: No data returned!</p>;
   }*/
   console.log(props.userWithPosts);
+  if (props.error) {
+    return <p>Error: {props.error}</p>;
+  }
+
+  const userData = props.userWithPosts?.getUserByUsername
+    ? props.userWithPosts.getUserByUsername
+    : null;
+  if (!userData) {
+    return <p>Error: Could not load User</p>;
+  }
   return (
     <div>
-      <p>Username: {props.userWithPosts.getUserByUsername?.username}</p>
-      <p>User_id: {props.userWithPosts.getUserByUsername?.user_id}</p>
+      <p>Username: {userData.username}</p>
+      <p>User_id: {userData.user_id}</p>
       <ul>
-        {props.userWithPosts.getUserByUsername?.posts?.posts?.map((p) => (
+        {userData.posts?.posts?.map((p) => (
           <li>{p?.title}</li>
         ))}
       </ul>
-      <p>
-        Has more posts:{" "}
-        {`${props.userWithPosts.getUserByUsername?.posts?.more}`}
-      </p>
+      <p>Has more posts: {`${userData.posts?.more}`}</p>
     </div>
   );
 };
