@@ -18,9 +18,8 @@ const months = [
 
 export const PostPreview = (props: IPostPreview) => {
   const { date } = props;
-  const fmtDate = `${
-    months[date.getMonth()]
-  } ${date.getDate()}, ${date.getFullYear()}`;
+  const d = new Date(date);
+  const fmtDate = `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
   return (
     <div className="post-preview">
       <Link href="/post">
