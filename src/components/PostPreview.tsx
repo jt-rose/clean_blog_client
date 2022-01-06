@@ -22,7 +22,7 @@ export const PostPreview = (props: IPostPreview) => {
   const fmtDate = `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
   return (
     <div className="post-preview">
-      <Link href="/post">
+      <Link href={`/${props.poster}/${props.postID}`}>
         <a>
           <h2 className="post-title">{props.title}</h2>
           {props.subtitle && (
@@ -32,7 +32,7 @@ export const PostPreview = (props: IPostPreview) => {
       </Link>
       <p className="post-meta">
         {"Posted by "}
-        <Link href={`/post/${props.postID}`}>
+        <Link href={`/${props.poster}`}>
           <a>{props.poster}</a>
         </Link>
         {" on "}
