@@ -24,7 +24,7 @@ export type Comment = {
   __typename?: 'Comment';
   comment_id: Scalars['Int'];
   comment_text: Scalars['String'];
-  comments?: Maybe<PaginatedComments>;
+  comments: PaginatedComments;
   created_at: Scalars['Time'];
   deleted: Scalars['Boolean'];
   hasSubComments: Scalars['Boolean'];
@@ -182,7 +182,7 @@ export enum ParentType {
 
 export type Post = {
   __typename?: 'Post';
-  comments?: Maybe<PaginatedComments>;
+  comments: PaginatedComments;
   created_at: Scalars['Time'];
   deleted: Scalars['Boolean'];
   post_id: Scalars['Int'];
@@ -263,10 +263,10 @@ export type QueryIsAuthorArgs = {
 
 export type User = {
   __typename?: 'User';
-  comments?: Maybe<PaginatedComments>;
+  comments: PaginatedComments;
   created_at: Scalars['Time'];
   email: Scalars['String'];
-  posts?: Maybe<PaginatedPosts>;
+  posts: PaginatedPosts;
   user_id: Scalars['Int'];
   username: Scalars['String'];
 };
@@ -360,7 +360,7 @@ export type GetUserWithPostsQueryVariables = Exact<{
 }>;
 
 
-export type GetUserWithPostsQuery = { __typename?: 'Query', getUserByUsername?: { __typename?: 'User', user_id: number, username: string, posts?: { __typename?: 'PaginatedPosts', more: boolean, posts?: Array<{ __typename?: 'Post', post_id: number, title: string, subtitle: string, post_text: string, created_at: any, deleted: boolean, votes: { __typename?: 'Votes', upvote: number, downvote: number } } | null | undefined> | null | undefined } | null | undefined } | null | undefined };
+export type GetUserWithPostsQuery = { __typename?: 'Query', getUserByUsername?: { __typename?: 'User', user_id: number, username: string, posts: { __typename?: 'PaginatedPosts', more: boolean, posts?: Array<{ __typename?: 'Post', post_id: number, title: string, subtitle: string, post_text: string, created_at: any, deleted: boolean, votes: { __typename?: 'Votes', upvote: number, downvote: number } } | null | undefined> | null | undefined } } | null | undefined };
 
 
 export const AccessPasswordResetDocument = `
