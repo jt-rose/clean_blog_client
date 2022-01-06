@@ -1,7 +1,8 @@
-import { useRouter } from "next/router";
+//import { useRouter } from "next/router";
 import { getSdk, GetUserWithPostsQuery } from "../../generated/graphql-sdk";
 import { client } from "../../utils/gqlClient";
 import { GetServerSideProps } from "next";
+import { PostPreview } from "../../components/PostPreview";
 
 interface UserResponse {
   userWithPosts: GetUserWithPostsQuery | null;
@@ -36,49 +37,44 @@ export const getServerSideProps: GetServerSideProps = async (
 };
 
 const User = (props: UserResponse) => {
-  const router = useRouter();
-  //const { user } = router.query;
-  //const { data, error, isLoading } = useGetUserWithPostsQuery(client, {
-  //username: "jtr",
-  //});
-
-  /*const username = typeof user === "string" ? user : "";
-  //const {} = useQuery('', )
-  const [result] = useGetUserWithPostsQuery({
-    variables: { username },
-    context: { fetchOptions: { credentials: "include" } },
-  });
-  const { data, fetching, error } = result;
-  if (error) {
-    console.log("error", error);
-    return <p>Error: {error.message}</p>;
-  }
-  if (fetching) {
-    return <p>...loading</p>;
-  }
-
-  if (!data || !data.getUserByUsername) {
-    return <p>Error: No data returned!</p>;
-  }*/
   console.log(props.userWithPosts);
+  // render error if encountered
   if (props.error) {
     return <p>Error: {props.error}</p>;
   }
 
+  // check for valid user data response
   const userData = props.userWithPosts?.getUserByUsername
     ? props.userWithPosts.getUserByUsername
     : null;
+
+  // render error if userWithPosts did not download
   if (!userData) {
     return <p>Error: Could not load User</p>;
   }
+
+  const userPosts = userData.posts?.posts || null;
+  const hasMorePosts = userData.posts?.more || null;
+
   return (
     <div>
       <p>Username: {userData.username}</p>
       <p>User_id: {userData.user_id}</p>
       <ul>
-        {userData.posts?.posts?.map((p) => (
-          <li>{p?.title}</li>
-        ))}
+        {userPosts &&
+          userPosts.map(
+            (p) =>
+              p && (
+                <PostPreview
+                  title={p.title}
+                  subtitle={p.subtitle}
+                  date={p.created_at}
+                  postID={p.post_id}
+                  poster={userData.username}
+                  key={`post-preview-${p.post_id}`}
+                />
+              )
+          )}
       </ul>
       <p>Has more posts: {`${userData.posts?.more}`}</p>
     </div>
