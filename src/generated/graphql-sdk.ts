@@ -358,6 +358,13 @@ export type GetUserWithPostsQueryVariables = Exact<{
 
 export type GetUserWithPostsQuery = { __typename?: 'Query', getUserByUsername?: { __typename?: 'User', user_id: number, username: string, posts: { __typename?: 'PaginatedPosts', more: boolean, posts?: Array<{ __typename?: 'Post', post_id: number, title: string, subtitle: string, post_text: string, created_at: any, deleted: boolean, votes: { __typename?: 'Votes', upvote: number, downvote: number } } | null | undefined> | null | undefined } } | null | undefined };
 
+export type GetPostQueryVariables = Exact<{
+  post_id: Scalars['Int'];
+}>;
+
+
+export type GetPostQuery = { __typename?: 'Query', getPost?: { __typename?: 'Post', post_id: number, user_id: number, title: string, subtitle: string, post_text: string, created_at: any, votes: { __typename?: 'Votes', upvote: number, downvote: number } } | null | undefined };
+
 
 export const AccessPasswordResetDocument = gql`
     mutation AccessPasswordReset($resetKey: String!) {
@@ -455,6 +462,22 @@ export const GetUserWithPostsDocument = gql`
   }
 }
     `;
+export const GetPostDocument = gql`
+    query GetPost($post_id: Int!) {
+  getPost(post_id: $post_id) {
+    post_id
+    user_id
+    title
+    subtitle
+    post_text
+    created_at
+    votes {
+      upvote
+      downvote
+    }
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string) => Promise<T>;
 
@@ -489,6 +512,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     GetUserWithPosts(variables: GetUserWithPostsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetUserWithPostsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetUserWithPostsQuery>(GetUserWithPostsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetUserWithPosts');
+    },
+    GetPost(variables: GetPostQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetPostQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetPostQuery>(GetPostDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetPost');
     }
   };
 }

@@ -362,6 +362,13 @@ export type GetUserWithPostsQueryVariables = Exact<{
 
 export type GetUserWithPostsQuery = { __typename?: 'Query', getUserByUsername?: { __typename?: 'User', user_id: number, username: string, posts: { __typename?: 'PaginatedPosts', more: boolean, posts?: Array<{ __typename?: 'Post', post_id: number, title: string, subtitle: string, post_text: string, created_at: any, deleted: boolean, votes: { __typename?: 'Votes', upvote: number, downvote: number } } | null | undefined> | null | undefined } } | null | undefined };
 
+export type GetPostQueryVariables = Exact<{
+  post_id: Scalars['Int'];
+}>;
+
+
+export type GetPostQuery = { __typename?: 'Query', getPost?: { __typename?: 'Post', post_id: number, user_id: number, title: string, subtitle: string, post_text: string, created_at: any, votes: { __typename?: 'Votes', upvote: number, downvote: number } } | null | undefined };
+
 
 export const AccessPasswordResetDocument = `
     mutation AccessPasswordReset($resetKey: String!) {
@@ -577,5 +584,35 @@ export const useGetUserWithPostsQuery = <
     useQuery<GetUserWithPostsQuery, TError, TData>(
       ['GetUserWithPosts', variables],
       fetcher<GetUserWithPostsQuery, GetUserWithPostsQueryVariables>(client, GetUserWithPostsDocument, variables, headers),
+      options
+    );
+export const GetPostDocument = `
+    query GetPost($post_id: Int!) {
+  getPost(post_id: $post_id) {
+    post_id
+    user_id
+    title
+    subtitle
+    post_text
+    created_at
+    votes {
+      upvote
+      downvote
+    }
+  }
+}
+    `;
+export const useGetPostQuery = <
+      TData = GetPostQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables: GetPostQueryVariables,
+      options?: UseQueryOptions<GetPostQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<GetPostQuery, TError, TData>(
+      ['GetPost', variables],
+      fetcher<GetPostQuery, GetPostQueryVariables>(client, GetPostDocument, variables, headers),
       options
     );
