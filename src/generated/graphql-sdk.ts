@@ -349,6 +349,14 @@ export type ResetPasswordMutationVariables = Exact<{
 
 export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword: { __typename?: 'User', user_id: number, username: string, email: string } };
 
+export type GetPostByUsernameAndTitleQueryVariables = Exact<{
+  username: Scalars['String'];
+  title: Scalars['String'];
+}>;
+
+
+export type GetPostByUsernameAndTitleQuery = { __typename?: 'Query', getPostByUsernameAndTitle?: { __typename?: 'Post', post_id: number, user_id: number, title: string, urlEncodedTitle: string, subtitle: string, post_text: string, created_at: any, votes: { __typename?: 'Votes', upvote: number, downvote: number } } | null | undefined };
+
 export type GetPostsQueryVariables = Exact<{
   author_id: Scalars['Int'];
   title?: InputMaybe<Scalars['String']>;
@@ -430,6 +438,23 @@ export const ResetPasswordDocument = gql`
     user_id
     username
     email
+  }
+}
+    `;
+export const GetPostByUsernameAndTitleDocument = gql`
+    query GetPostByUsernameAndTitle($username: String!, $title: String!) {
+  getPostByUsernameAndTitle(username: $username, title: $title) {
+    post_id
+    user_id
+    title
+    urlEncodedTitle
+    subtitle
+    post_text
+    created_at
+    votes {
+      upvote
+      downvote
+    }
   }
 }
     `;
@@ -517,6 +542,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     ResetPassword(variables: ResetPasswordMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<ResetPasswordMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<ResetPasswordMutation>(ResetPasswordDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'ResetPassword');
+    },
+    GetPostByUsernameAndTitle(variables: GetPostByUsernameAndTitleQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetPostByUsernameAndTitleQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetPostByUsernameAndTitleQuery>(GetPostByUsernameAndTitleDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetPostByUsernameAndTitle');
     },
     GetPosts(variables: GetPostsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetPostsQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetPostsQuery>(GetPostsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetPosts');

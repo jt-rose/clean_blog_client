@@ -1,0 +1,15 @@
+query GetPostByUsernameAndTitle($username: String!, $title: String!) {
+  getPostByUsernameAndTitle(username: $username, title: $title) {
+    post_id
+    user_id
+    title
+    urlEncodedTitle
+    subtitle
+    post_text
+    created_at
+    votes {
+      upvote
+      downvote
+    }
+  }
+}

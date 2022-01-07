@@ -353,6 +353,14 @@ export type ResetPasswordMutationVariables = Exact<{
 
 export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword: { __typename?: 'User', user_id: number, username: string, email: string } };
 
+export type GetPostByUsernameAndTitleQueryVariables = Exact<{
+  username: Scalars['String'];
+  title: Scalars['String'];
+}>;
+
+
+export type GetPostByUsernameAndTitleQuery = { __typename?: 'Query', getPostByUsernameAndTitle?: { __typename?: 'Post', post_id: number, user_id: number, title: string, urlEncodedTitle: string, subtitle: string, post_text: string, created_at: any, votes: { __typename?: 'Votes', upvote: number, downvote: number } } | null | undefined };
+
 export type GetPostsQueryVariables = Exact<{
   author_id: Scalars['Int'];
   title?: InputMaybe<Scalars['String']>;
@@ -527,6 +535,37 @@ export const useResetPasswordMutation = <
     useMutation<ResetPasswordMutation, TError, ResetPasswordMutationVariables, TContext>(
       'ResetPassword',
       (variables?: ResetPasswordMutationVariables) => fetcher<ResetPasswordMutation, ResetPasswordMutationVariables>(client, ResetPasswordDocument, variables, headers)(),
+      options
+    );
+export const GetPostByUsernameAndTitleDocument = `
+    query GetPostByUsernameAndTitle($username: String!, $title: String!) {
+  getPostByUsernameAndTitle(username: $username, title: $title) {
+    post_id
+    user_id
+    title
+    urlEncodedTitle
+    subtitle
+    post_text
+    created_at
+    votes {
+      upvote
+      downvote
+    }
+  }
+}
+    `;
+export const useGetPostByUsernameAndTitleQuery = <
+      TData = GetPostByUsernameAndTitleQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables: GetPostByUsernameAndTitleQueryVariables,
+      options?: UseQueryOptions<GetPostByUsernameAndTitleQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<GetPostByUsernameAndTitleQuery, TError, TData>(
+      ['GetPostByUsernameAndTitle', variables],
+      fetcher<GetPostByUsernameAndTitleQuery, GetPostByUsernameAndTitleQueryVariables>(client, GetPostByUsernameAndTitleDocument, variables, headers),
       options
     );
 export const GetPostsDocument = `
