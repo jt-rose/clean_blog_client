@@ -1,11 +1,14 @@
 import { GetServerSideProps } from "next";
 //import { useRouter } from "next/router";
-import { getSdk, GetPostQuery } from "../../generated/graphql-sdk";
+import {
+  getSdk,
+  GetPostByUsernameAndTitleQuery,
+} from "../../generated/graphql-sdk";
 import { client } from "../../utils/gqlClient";
 import { Post } from "../post";
 
 interface PostResponse {
-  post: GetPostQuery | null;
+  post: GetPostByUsernameAndTitleQuery | null;
   error: string | null;
 }
 
@@ -13,14 +16,14 @@ export const getServerSideProps: GetServerSideProps = async (
   context
 ): Promise<{ props: PostResponse }> => {
   try {
-    const { postID } = context.query;
-    const postIDInt = typeof postID === "string" ? parseInt(postID) : 0;
-    if (postIDInt === NaN) {
-      return {
-        props: { post: null, error: "post_id must be a number" },
-      };
-    }
-    const post = await getSdk(client).GetPost({ post_id: postIDInt });
+    const { user, postTitle } = context.query;
+    const username = typeof user === "string" ? user : "";
+    const title = typeof postTitle === "string" ? postTitle : "";
+
+    const post = await getSdk(client).GetPostByUsernameAndTitle({
+      username,
+      title,
+    });
 
     return { props: { post, error: null } };
   } catch (e) {
@@ -40,7 +43,6 @@ export const getServerSideProps: GetServerSideProps = async (
 };
 
 const PostWithData = (props: PostResponse) => {
-  console.log(props.post);
   //const router = useRouter();
   //const { user } = router.query;
 
@@ -53,7 +55,7 @@ const PostWithData = (props: PostResponse) => {
 
   return (
     <Post>
-      <p>post: {props.post.getPost?.title}</p>
+      <p>post: {props.post.getPostByUsernameAndTitle?.title}</p>
     </Post>
   );
 };
