@@ -3,6 +3,7 @@ query GetPost($post_id: Int!) {
     post_id
     user_id
     title
+    urlEncodedTitle
     subtitle
     post_text
     created_at

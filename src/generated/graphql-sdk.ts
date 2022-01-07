@@ -185,6 +185,7 @@ export type Post = {
   post_text: Scalars['String'];
   subtitle: Scalars['String'];
   title: Scalars['String'];
+  urlEncodedTitle: Scalars['String'];
   user?: Maybe<User>;
   user_id: Scalars['Int'];
   votes: Votes;
@@ -215,6 +216,7 @@ export type Query = {
   getManyPosts: PaginatedPosts;
   getManyUsers: PaginatedUsers;
   getPost?: Maybe<Post>;
+  getPostByUsernameAndTitle?: Maybe<Post>;
   getUser?: Maybe<User>;
   getUserByUsername?: Maybe<User>;
   isAuthor: Scalars['Boolean'];
@@ -240,6 +242,12 @@ export type QueryGetManyUsersArgs = {
 
 export type QueryGetPostArgs = {
   post_id: Scalars['Int'];
+};
+
+
+export type QueryGetPostByUsernameAndTitleArgs = {
+  title: Scalars['String'];
+  username: Scalars['String'];
 };
 
 
@@ -349,21 +357,21 @@ export type GetPostsQueryVariables = Exact<{
 }>;
 
 
-export type GetPostsQuery = { __typename?: 'Query', getManyPosts: { __typename?: 'PaginatedPosts', more: boolean, posts?: Array<{ __typename?: 'Post', post_id: number, title: string } | null | undefined> | null | undefined } };
+export type GetPostsQuery = { __typename?: 'Query', getManyPosts: { __typename?: 'PaginatedPosts', more: boolean, posts?: Array<{ __typename?: 'Post', post_id: number, title: string, urlEncodedTitle: string } | null | undefined> | null | undefined } };
 
 export type GetUserWithPostsQueryVariables = Exact<{
   username: Scalars['String'];
 }>;
 
 
-export type GetUserWithPostsQuery = { __typename?: 'Query', getUserByUsername?: { __typename?: 'User', user_id: number, username: string, posts: { __typename?: 'PaginatedPosts', more: boolean, posts?: Array<{ __typename?: 'Post', post_id: number, title: string, subtitle: string, post_text: string, created_at: any, deleted: boolean, votes: { __typename?: 'Votes', upvote: number, downvote: number } } | null | undefined> | null | undefined } } | null | undefined };
+export type GetUserWithPostsQuery = { __typename?: 'Query', getUserByUsername?: { __typename?: 'User', user_id: number, username: string, posts: { __typename?: 'PaginatedPosts', more: boolean, posts?: Array<{ __typename?: 'Post', post_id: number, title: string, urlEncodedTitle: string, subtitle: string, post_text: string, created_at: any, deleted: boolean, votes: { __typename?: 'Votes', upvote: number, downvote: number } } | null | undefined> | null | undefined } } | null | undefined };
 
 export type GetPostQueryVariables = Exact<{
   post_id: Scalars['Int'];
 }>;
 
 
-export type GetPostQuery = { __typename?: 'Query', getPost?: { __typename?: 'Post', post_id: number, user_id: number, title: string, subtitle: string, post_text: string, created_at: any, votes: { __typename?: 'Votes', upvote: number, downvote: number } } | null | undefined };
+export type GetPostQuery = { __typename?: 'Query', getPost?: { __typename?: 'Post', post_id: number, user_id: number, title: string, urlEncodedTitle: string, subtitle: string, post_text: string, created_at: any, votes: { __typename?: 'Votes', upvote: number, downvote: number } } | null | undefined };
 
 
 export const AccessPasswordResetDocument = gql`
@@ -434,6 +442,7 @@ export const GetPostsDocument = gql`
     posts {
       post_id
       title
+      urlEncodedTitle
     }
     more
   }
@@ -448,6 +457,7 @@ export const GetUserWithPostsDocument = gql`
       posts {
         post_id
         title
+        urlEncodedTitle
         subtitle
         post_text
         created_at
@@ -468,6 +478,7 @@ export const GetPostDocument = gql`
     post_id
     user_id
     title
+    urlEncodedTitle
     subtitle
     post_text
     created_at

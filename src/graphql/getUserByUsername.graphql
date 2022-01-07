@@ -6,6 +6,7 @@ query GetUserWithPosts($username: String!) {
       posts {
         post_id
         title
+        urlEncodedTitle
         subtitle
         post_text
         created_at

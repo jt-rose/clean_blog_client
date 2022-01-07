@@ -6,6 +6,7 @@ query GetPosts($author_id: Int!, $title: String, $limit: Int!, $offset: Int!) {
     posts {
       post_id
       title
+      urlEncodedTitle
     }
     more
   }
