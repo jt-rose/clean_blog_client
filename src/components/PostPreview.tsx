@@ -1,5 +1,14 @@
 import Link from "next/link";
-import { IPostPreview } from "../data/posts";
+
+export interface IPostPreview {
+  postID: number;
+  title: string;
+  urlEncodedTitle: string;
+  subtitle?: string;
+
+  poster: string;
+  date: Date;
+}
 
 const months = [
   "January",
@@ -22,7 +31,7 @@ export const PostPreview = (props: IPostPreview) => {
   const fmtDate = `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
   return (
     <div className="post-preview">
-      <Link href={`/${props.poster}/${props.postID}`}>
+      <Link href={`/${props.poster}/${props.urlEncodedTitle}`}>
         <a>
           <h2 className="post-title">{props.title}</h2>
           {props.subtitle && (

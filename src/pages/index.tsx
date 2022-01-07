@@ -20,6 +20,7 @@ const Index = (props: { posts: IPostPreview[] }) => {
               <div key={post.title + "-container"}>
                 <PostPreview
                   title={post.title}
+                  urlEncodedTitle={post.title}
                   subtitle={post.subtitle}
                   date={post.date}
                   poster={post.poster}

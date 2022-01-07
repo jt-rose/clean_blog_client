@@ -37,7 +37,6 @@ export const getServerSideProps: GetServerSideProps = async (
 };
 
 const User = (props: UserResponse) => {
-  console.log(props.userWithPosts);
   // render error if encountered
   if (props.error) {
     return <p>Error: {props.error}</p>;
@@ -67,6 +66,7 @@ const User = (props: UserResponse) => {
               p && (
                 <PostPreview
                   title={p.title}
+                  urlEncodedTitle={p.urlEncodedTitle}
                   subtitle={p.subtitle}
                   date={p.created_at}
                   postID={p.post_id}
