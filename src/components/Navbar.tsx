@@ -8,19 +8,31 @@ interface NavBarLinkData {
   linkName: string;
 }
 
+// links used on home page of site
 const homeNavBarLinks: NavBarLinkData[] = [
   { href: "/", linkName: "Home" },
   { href: "/login", linkName: "Login" },
   { href: "/search", linkName: "Search" },
 ];
 
-const userNavBarLinks: NavBarLinkData[] = [
-  { href: "/", linkName: "Home" },
-  { href: "/[user]", linkName: "[user]" },
-  { href: "/create", linkName: "Create" },
-  { href: "/activity", linkName: "Activity" },
-  { href: "/about", linkName: "About" },
-];
+// generated links custom to each user's blog
+const getUserNavbarLinks = (
+  username: string,
+  isAuthor: boolean
+): NavBarLinkData[] => {
+  const userLinks = [
+    { href: "/", linkName: "Home" },
+    { href: `/${username}`, linkName: username },
+    { href: `/${username}/about`, linkName: "About" },
+    { href: `/${username}/activity`, linkName: "Activity" },
+  ];
+
+  const fullLinks = isAuthor
+    ? [...userLinks, { href: `/${username}/create`, linkName: "Create" }]
+    : userLinks;
+
+  return fullLinks;
+};
 
 const NavBarToggler = (props: {
   visible: boolean;
@@ -54,7 +66,7 @@ const NavBarLinks = (props: {
         className="navbar-nav ms-auto py-4 py-lg-0"
         id={`navbar-${props.mediaTarget}`}
       >
-        {props.linkData.map((pageInfo) => (
+        {homeNavBarLinks.map((pageInfo) => (
           <li className="nav-item" key={pageInfo.linkName + " link"}>
             <Link href={pageInfo.href}>
               <a className="nav-link px-lg-3 py-3 py-lg-4">
@@ -108,4 +120,7 @@ const Navbar = (props: { linkData: NavBarLinkData[] }) => {
 };
 
 export const HomeNavbar = () => <Navbar linkData={homeNavBarLinks} />;
-export const UserNavbar = () => <Navbar linkData={userNavBarLinks} />;
+export const UserNavbar = (props: { username: string; isAuthor: boolean }) => {
+  const linkData = getUserNavbarLinks(props.username, props.isAuthor);
+  return <Navbar linkData={linkData} />;
+};
