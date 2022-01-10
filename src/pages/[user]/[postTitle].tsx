@@ -29,11 +29,11 @@ export const getServerSideProps: GetServerSideProps = async (
       title,
     });
 
-    // get user
-    //! Note: refactor use redis for user_id
-    const me = await getSdk(client).Me();
-
-    const isAuthor = me.me?.user_id == post.getPostByUsernameAndTitle?.user_id;
+    // check if author
+    const user_id = post.getPostByUsernameAndTitle?.user_id || 0;
+    const isAuthor = await (
+      await getSdk(client).IsAuthor({ author_id: user_id })
+    ).isAuthor;
 
     return { props: { post, username, isAuthor, error: null } };
   } catch (e) {
