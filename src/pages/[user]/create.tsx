@@ -1,5 +1,5 @@
 import { Header } from "../../components/Header";
-import { Navbar } from "../../components/Navbar";
+import { UserNavbar } from "../../components/Navbar";
 import { useMemo, useState } from "react";
 
 import { createEditor } from "slate";
@@ -36,7 +36,7 @@ const CreatePost = () => {
         subHeading="Let your pen wander..."
         headerIMGPath="/img/home-bg.jpg"
       />
-      <Navbar />
+      <UserNavbar />
       <Slate editor={editor} value={value} onChange={setValue}>
         <Editable />
       </Slate>

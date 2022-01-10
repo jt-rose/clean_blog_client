@@ -1,7 +1,7 @@
 import { Header } from "../components/Header";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
-import { Navbar } from "../components/Navbar";
+import { HomeNavbar } from "../components/Navbar";
 
 type FormData = {
   name: string;
@@ -50,7 +50,7 @@ const Login = () => {
         subHeading="Have questions? I have answers."
         headerIMGPath="/img/contact-bg.jpg"
       />
-      <Navbar />
+      <HomeNavbar />
       <main className="mb-4">
         <div className="container px-4 px-lg-5">
           <div className="row gx-4 gx-lg-5 justify-content-center">

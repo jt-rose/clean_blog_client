@@ -1,5 +1,5 @@
 import { Header } from "../../components/Header";
-import { Navbar } from "../../components/Navbar";
+import { UserNavbar } from "../../components/Navbar";
 
 const About = () => {
   return (
@@ -9,7 +9,7 @@ const About = () => {
         subHeading="This is what I do."
         headerIMGPath="/img/about-bg.jpg"
       />
-      <Navbar />
+      <UserNavbar />
       <main className="mb-4">
         <div className="container px-4 px-lg-5">
           <div className="row gx-4 gx-lg-5 justify-content-center">
