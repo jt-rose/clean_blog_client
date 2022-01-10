@@ -1,0 +1,3 @@
+query IsAuthor($author_id: Int!) {
+  isAuthor(author_id: $author_id)
+}

@@ -313,6 +313,13 @@ export type ForgotPasswordMutationVariables = Exact<{
 
 export type ForgotPasswordMutation = { __typename?: 'Mutation', forgotPassword: boolean };
 
+export type IsAuthorQueryVariables = Exact<{
+  author_id: Scalars['Int'];
+}>;
+
+
+export type IsAuthorQuery = { __typename?: 'Query', isAuthor: boolean };
+
 export type LoginMutationVariables = Exact<{
   username: Scalars['String'];
   password: Scalars['String'];
@@ -390,6 +397,11 @@ export const AccessPasswordResetDocument = gql`
 export const ForgotPasswordDocument = gql`
     mutation ForgotPassword($username: String!) {
   forgotPassword(username: $username)
+}
+    `;
+export const IsAuthorDocument = gql`
+    query IsAuthor($author_id: Int!) {
+  isAuthor(author_id: $author_id)
 }
     `;
 export const LoginDocument = gql`
@@ -527,6 +539,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     ForgotPassword(variables: ForgotPasswordMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<ForgotPasswordMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<ForgotPasswordMutation>(ForgotPasswordDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'ForgotPassword');
+    },
+    IsAuthor(variables: IsAuthorQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<IsAuthorQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<IsAuthorQuery>(IsAuthorDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'IsAuthor');
     },
     Login(variables: LoginMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<LoginMutation> {
       return withWrapper((wrappedRequestHeaders) => client.request<LoginMutation>(LoginDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'Login');

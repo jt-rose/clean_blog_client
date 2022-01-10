@@ -317,6 +317,13 @@ export type ForgotPasswordMutationVariables = Exact<{
 
 export type ForgotPasswordMutation = { __typename?: 'Mutation', forgotPassword: boolean };
 
+export type IsAuthorQueryVariables = Exact<{
+  author_id: Scalars['Int'];
+}>;
+
+
+export type IsAuthorQuery = { __typename?: 'Query', isAuthor: boolean };
+
 export type LoginMutationVariables = Exact<{
   username: Scalars['String'];
   password: Scalars['String'];
@@ -420,6 +427,25 @@ export const useForgotPasswordMutation = <
     useMutation<ForgotPasswordMutation, TError, ForgotPasswordMutationVariables, TContext>(
       'ForgotPassword',
       (variables?: ForgotPasswordMutationVariables) => fetcher<ForgotPasswordMutation, ForgotPasswordMutationVariables>(client, ForgotPasswordDocument, variables, headers)(),
+      options
+    );
+export const IsAuthorDocument = `
+    query IsAuthor($author_id: Int!) {
+  isAuthor(author_id: $author_id)
+}
+    `;
+export const useIsAuthorQuery = <
+      TData = IsAuthorQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables: IsAuthorQueryVariables,
+      options?: UseQueryOptions<IsAuthorQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<IsAuthorQuery, TError, TData>(
+      ['IsAuthor', variables],
+      fetcher<IsAuthorQuery, IsAuthorQueryVariables>(client, IsAuthorDocument, variables, headers),
       options
     );
 export const LoginDocument = `
