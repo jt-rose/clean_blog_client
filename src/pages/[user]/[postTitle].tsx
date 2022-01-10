@@ -5,10 +5,12 @@ import {
   GetPostByUsernameAndTitleQuery,
 } from "../../generated/graphql-sdk";
 import { client } from "../../utils/gqlClient";
-import { Post } from "../post";
+import { Post } from "../../components/post";
 
 interface PostResponse {
   post: GetPostByUsernameAndTitleQuery | null;
+  username: string | null;
+  isAuthor: boolean;
   error: string | null;
 }
 
@@ -16,25 +18,40 @@ export const getServerSideProps: GetServerSideProps = async (
   context
 ): Promise<{ props: PostResponse }> => {
   try {
+    // attempt to get [user] and [postTitle] from url
     const { user, postTitle } = context.query;
     const username = typeof user === "string" ? user : "";
     const title = typeof postTitle === "string" ? postTitle : "";
 
+    // get matching post via username and title
     const post = await getSdk(client).GetPostByUsernameAndTitle({
       username,
       title,
     });
 
-    return { props: { post, error: null } };
+    // get user
+    //! Note: refactor use redis for user_id
+    const me = await getSdk(client).Me();
+
+    const isAuthor = me.me?.user_id == post.getPostByUsernameAndTitle?.user_id;
+
+    return { props: { post, username, isAuthor, error: null } };
   } catch (e) {
     if (e instanceof Error) {
       return {
-        props: { post: null, error: e.message.replace(/\:.+/, "") },
+        props: {
+          post: null,
+          username: null,
+          isAuthor: false,
+          error: e.message.replace(/\:.+/, ""),
+        },
       };
     } else {
       return {
         props: {
           post: null,
+          username: null,
+          isAuthor: false,
           error: "internal server error",
         },
       };
@@ -43,19 +60,17 @@ export const getServerSideProps: GetServerSideProps = async (
 };
 
 const PostWithData = (props: PostResponse) => {
-  //const router = useRouter();
-  //const { user } = router.query;
-
-  if (props.error) {
+  const { error, post, username, isAuthor } = props;
+  if (error) {
     return <p>Error: {props.error}</p>;
   }
-  if (!props.post) {
+  if (!post || !username) {
     return <p>No such post found!</p>;
   }
 
   return (
-    <Post>
-      <p>post: {props.post.getPostByUsernameAndTitle?.title}</p>
+    <Post username={username} isAuthor={isAuthor}>
+      <p>post: {post.getPostByUsernameAndTitle?.title}</p>
     </Post>
   );
 };
