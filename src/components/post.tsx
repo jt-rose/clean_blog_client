@@ -1,11 +1,14 @@
 import { Header } from "../components/Header";
-import { Navbar } from "../components/Navbar";
+import { UserNavbar } from "../components/Navbar";
 import { ReactNode } from "react";
-import { SamplePost } from "../components/SamplePost";
 
 // The Post page can accept any number of components for the post
 // via the children prop
-export const Post = (props: { children: ReactNode }) => {
+export const Post = (props: {
+  children: ReactNode;
+  username: string;
+  isAuthor: boolean;
+}) => {
   return (
     <>
       <Header
@@ -13,7 +16,7 @@ export const Post = (props: { children: ReactNode }) => {
         subHeading="Problems look mighty small from 150 miles up"
         headerIMGPath="/img/post-bg.jpg"
       />
-      <Navbar />
+      <UserNavbar username={props.username} isAuthor={props.isAuthor} />
       <article className="mb-4">
         <div className="container px-4 px-lg-5">
           <div className="row gx-4 gx-lg-5 justify-content-center">
@@ -26,12 +29,3 @@ export const Post = (props: { children: ReactNode }) => {
     </>
   );
 };
-
-// to keep our frontend example simple, we will provide a direct sample
-// in a live app this would be fetched from the server using SSR
-const Sample = () => (
-  <Post>
-    <SamplePost />
-  </Post>
-);
-export default Sample;
