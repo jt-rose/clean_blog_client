@@ -66,7 +66,7 @@ const NavBarLinks = (props: {
         className="navbar-nav ms-auto py-4 py-lg-0"
         id={`navbar-${props.mediaTarget}`}
       >
-        {homeNavBarLinks.map((pageInfo) => (
+        {props.linkData.map((pageInfo) => (
           <li className="nav-item" key={pageInfo.linkName + " link"}>
             <Link href={pageInfo.href}>
               <a className="nav-link px-lg-3 py-3 py-lg-4">

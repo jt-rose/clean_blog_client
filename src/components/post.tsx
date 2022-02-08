@@ -1,5 +1,5 @@
-import { Header } from "../components/Header";
-import { UserNavbar } from "../components/Navbar";
+import { Header } from "./Header";
+import { UserNavbar } from "./Navbar";
 import { ReactNode } from "react";
 
 // The Post page can accept any number of components for the post

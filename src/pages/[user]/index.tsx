@@ -3,9 +3,11 @@ import { getSdk, GetUserWithPostsQuery } from "../../generated/graphql-sdk";
 import { client } from "../../utils/gqlClient";
 import { GetServerSideProps } from "next";
 import { PostPreview } from "../../components/PostPreview";
+import { UserNavbar } from "../../components/Navbar";
 
 interface UserResponse {
   userWithPosts: GetUserWithPostsQuery | null;
+  isAuthor: boolean;
   error: string | null;
 }
 
@@ -19,16 +21,26 @@ export const getServerSideProps: GetServerSideProps = async (
       username,
     });
 
-    return { props: { userWithPosts, error: null } };
+    const user_id = userWithPosts.getUserByUsername?.user_id || 0;
+    const isAuthor = await (
+      await getSdk(client).IsAuthor({ author_id: user_id })
+    ).isAuthor;
+
+    return { props: { userWithPosts, isAuthor, error: null } };
   } catch (e) {
     if (e instanceof Error) {
       return {
-        props: { userWithPosts: null, error: e.message.replace(/\:.+/, "") },
+        props: {
+          userWithPosts: null,
+          isAuthor: false,
+          error: e.message.replace(/\:.+/, ""),
+        },
       };
     } else {
       return {
         props: {
           userWithPosts: null,
+          isAuthor: false,
           error: "internal server error",
         },
       };
@@ -57,6 +69,7 @@ const User = (props: UserResponse) => {
 
   return (
     <div>
+      <UserNavbar username={userData.username} isAuthor={props.isAuthor} />
       <p>Username: {userData.username}</p>
       <p>User_id: {userData.user_id}</p>
       <ul>
