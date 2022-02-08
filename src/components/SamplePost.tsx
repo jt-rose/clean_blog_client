@@ -1,5 +1,5 @@
 import Image from "next/image";
-import postSampleImg from "../public/img/post-sample-image.jpg";
+import postSampleImg from "../../public/img/post-sample-image.jpg";
 
 // a sample post that will be fed into the Post page component via react compostion
 export const SamplePost = () => {

@@ -1,6 +1,6 @@
 import { Header } from "../components/Header";
 import { PostPreview } from "../components/PostPreview";
-import { Navbar } from "../components/Navbar";
+import { HomeNavbar } from "../components/Navbar";
 import { IPostPreview, posts } from "../data/posts";
 
 const Index = (props: { posts: IPostPreview[] }) => {
@@ -11,7 +11,7 @@ const Index = (props: { posts: IPostPreview[] }) => {
         subHeading="A Blog Theme by Start Bootstrap"
         headerIMGPath="/img/home-bg.jpg"
       />
-      <Navbar />
+      <HomeNavbar />
       <div className="container px-4 px-lg-5">
         <div className="row gx-4 gx-lg-5 justify-content-center">
           <div className="col-md-10 col-lg-8 col-xl-7">
